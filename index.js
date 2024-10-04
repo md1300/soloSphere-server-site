@@ -2,7 +2,7 @@ const express=require('express')
 const cors=require('cors')
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId,} = require('mongodb');
 const cookieParser = require('cookie-parser');
 const port=process.env.PORT|| 9000
 
@@ -28,7 +28,7 @@ const verifyToken=(req,res,next)=>{
         console.log(error)
         return res.status(401).send({message:'unauthorized access'})
       }
-      console.log(decoded)
+      // console.log(decoded)
       req.user=decoded ;
       next()
     })
@@ -141,6 +141,7 @@ async function run() {
     app.put('/job/:id',async(req,res)=>{
       const id=req.params.id ;
       const jobData=req.body ;
+      
       const filter={_id:new ObjectId(id)}
       
       const options={upsert:true}
@@ -183,6 +184,7 @@ async function run() {
      app.patch('/bid/:id',async(req,res)=>{
       const id=req.params.id ;
       const status=req.body ;
+     console.log(id)
       const query={_id:new ObjectId(id)} ;
       const updateStatus={
         $set:{...status}
