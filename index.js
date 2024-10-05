@@ -90,7 +90,7 @@ async function run() {
       }).send({success:true})
     })
 
-
+// get all data  from jobs collection----------------
  app.get('/jobs',async(req,res)=>{
    const result=await jobsCollection.find().toArray()
    res.send(result)
@@ -201,6 +201,27 @@ async function run() {
       res.send(result)
      })
 
+// get all jobs data form db for pagination 
+     app.get('/all-jobs',async(req,res)=>{
+      const size=parseInt(req.query.size)
+      const page=parseInt(req.query.page)-1 
+      const filter=req.query.filter
+      console.log(size,page,filter)
+      let query={}
+      if(filter)query={category:filter}
+
+      const result=await jobsCollection.find(query).skip(size*page).limit(size).toArray()
+      res.send(result)
+    })
+
+// get all jobs data form db for count
+     app.get('/jobs-count',async(req,res)=>{
+      const filter=req.query.filter
+     let query={}
+     if(filter)query={category:filter}
+      const count=await jobsCollection.countDocuments(query)
+      res.send({count})
+    })
     
 
     // Send a ping to confirm a successful connection
