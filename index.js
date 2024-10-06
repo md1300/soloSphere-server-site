@@ -206,11 +206,14 @@ async function run() {
       const size=parseInt(req.query.size)
       const page=parseInt(req.query.page)-1 
       const filter=req.query.filter
-      console.log(size,page,filter)
+      const sort=req.query.sort
       let query={}
       if(filter)query={category:filter}
-
-      const result=await jobsCollection.find(query).skip(size*page).limit(size).toArray()
+      
+       let options={} 
+       if(sort)options={sort:{deadline:sort==='asc'?1:-1}}
+      console.log(size,page,filter)
+      const result=await jobsCollection.find(query,options).skip(size*page).limit(size).toArray()
       res.send(result)
     })
 
